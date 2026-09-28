@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espeto - Setup Secrets Manual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .step {
+            margin-bottom: 40px;
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-left: -44px;
+            margin-bottom: 10px;
+        }
+
+        .step h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .instructions {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        .secret {
+            background: #fffacd;
+            border: 1px solid #ffeb3b;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .secret-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #764ba2;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #155724;
+        }
+
+        .link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .steps-container {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            counter-increment: step-counter;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #764ba2;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Espeto - Setup Secrets</h1>
+            <p>Guia Manual Passo-a-Passo (5 minutos)</p>
+        </div>
+
+        <div class="content">
+            <div class="warning">
+                <strong>⚠️ Importante:</strong> Você deve fazer login no GitHub e Netlify antes de começar!
+            </div>
+
+            <div class="steps-container">
+
+                <!-- PASSO 1: GitHub Secrets -->
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h2>Adicionar Secrets no GitHub</h2>
+
+                    <p><strong>Ir para:</strong> <a href="https://github.com/jack-182/-espeto-pdv/settings/secrets/actions" class="link" target="_blank">GitHub → Secrets</a></p>
+
+                    <div class="instructions">
+                        <strong>⚙️ O que fazer:</strong><br><br>
+                        1. Clique no link acima (vai abrir GitHub)<br>
+                        2. Clique no botão <strong>"New repository secret"</strong> (verde)<br>
+                        3. Para cada item abaixo:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;• Digite o <strong>Name</strong><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;• Cole o <strong>Value</strong> usando o botão [Copy]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;• Clique <strong>"Add secret"</strong><br>
+                        4. Repita para todos os 6 items
+                    </div>
+
+                    <!-- Secret 1 -->
+                    <div class="secret">
+                        <div class="secret-label">1️⃣ Name:</div>
+                        REACT_APP_FIREBASE_PROJECT_ID
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        imagined-graph-k6pck
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Secret 2 -->
+                    <div class="secret">
+                        <div class="secret-label">2️⃣ Name:</div>
+                        REACT_APP_FIREBASE_API_KEY
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        AIzaSyBkuj-Vp4oGuVSWtysV-aRP3oLSStnkrJI
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Secret 3 -->
+                    <div class="secret">
+                        <div class="secret-label">3️⃣ Name:</div>
+                        REACT_APP_FIREBASE_AUTH_DOMAIN
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        imagined-graph-k6pck.firebaseapp.com
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Secret 4 -->
+                    <div class="secret">
+                        <div class="secret-label">4️⃣ Name:</div>
+                        REACT_APP_FIREBASE_STORAGE_BUCKET
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        imagined-graph-k6pck.firebasestorage.app
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Secret 5 -->
+                    <div class="secret">
+                        <div class="secret-label">5️⃣ Name:</div>
+                        REACT_APP_FIREBASE_MESSAGING_SENDER_ID
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        260296343980
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Secret 6 -->
+                    <div class="secret">
+                        <div class="secret-label">6️⃣ Name:</div>
+                        REACT_APP_FIREBASE_APP_ID
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        1:260296343980:web:6c64c984f500757e8fba09
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <div class="success" style="margin-top: 20px;">
+                        ✅ Após adicionar todos os 6 secrets, você verá na lista do GitHub
+                    </div>
+                </div>
+
+                <!-- PASSO 2: Netlify Build Vars -->
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h2>Adicionar Build Environment Variables no Netlify</h2>
+
+                    <p><strong>Ir para:</strong> <a href="https://app.netlify.com/sites" class="link" target="_blank">Netlify Dashboard</a></p>
+
+                    <div class="instructions">
+                        <strong>⚙️ O que fazer:</strong><br><br>
+                        1. Clique no link acima (vai abrir Netlify)<br>
+                        2. Selecione seu site (ex: mellow-kleicha-eb0e47)<br>
+                        3. Vá para <strong>Settings → Build & Deploy → Environment</strong><br>
+                        4. Clique <strong>"Edit variables"</strong> (ou New variable)<br>
+                        5. Para cada item abaixo:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;• Digite o <strong>Key</strong><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;• Cole o <strong>Value</strong> usando [Copy]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;• Clique <strong>Save</strong><br>
+                        6. Repita para todos os 6 items
+                    </div>
+
+                    <!-- Netlify Var 1 -->
+                    <div class="secret">
+                        <div class="secret-label">1️⃣ Key:</div>
+                        REACT_APP_FIREBASE_PROJECT_ID
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        imagined-graph-k6pck
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Netlify Var 2 -->
+                    <div class="secret">
+                        <div class="secret-label">2️⃣ Key:</div>
+                        REACT_APP_FIREBASE_API_KEY
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        AIzaSyBkuj-Vp4oGuVSWtysV-aRP3oLSStnkrJI
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Netlify Var 3 -->
+                    <div class="secret">
+                        <div class="secret-label">3️⃣ Key:</div>
+                        REACT_APP_FIREBASE_AUTH_DOMAIN
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        imagined-graph-k6pck.firebaseapp.com
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Netlify Var 4 -->
+                    <div class="secret">
+                        <div class="secret-label">4️⃣ Key:</div>
+                        REACT_APP_FIREBASE_STORAGE_BUCKET
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        imagined-graph-k6pck.firebasestorage.app
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Netlify Var 5 -->
+                    <div class="secret">
+                        <div class="secret-label">5️⃣ Key:</div>
+                        REACT_APP_FIREBASE_MESSAGING_SENDER_ID
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        260296343980
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <!-- Netlify Var 6 -->
+                    <div class="secret">
+                        <div class="secret-label">6️⃣ Key:</div>
+                        REACT_APP_FIREBASE_APP_ID
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        <div class="secret-label" style="margin-top: 10px;">Value:</div>
+                        1:260296343980:web:6c64c984f500757e8fba09
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+
+                    <div class="success" style="margin-top: 20px;">
+                        ✅ Após adicionar, você verá na lista do Netlify
+                    </div>
+                </div>
+
+                <!-- PASSO 3: Trigger Deploy -->
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h2>Trigger Novo Deploy</h2>
+
+                    <div class="instructions">
+                        <strong>⚙️ O que fazer:</strong><br><br>
+                        <strong>No GitHub:</strong><br>
+                        1. Ir para <a href="https://github.com/jack-182/-espeto-pdv/actions" class="link" target="_blank">GitHub Actions</a><br>
+                        2. Clicar em qualquer workflow<br>
+                        3. Clicar <strong>"Run workflow"</strong> (botão azul)<br>
+                        <br>
+                        <strong>Ou no Netlify:</strong><br>
+                        1. Ir para <a href="https://app.netlify.com" class="link" target="_blank">Netlify Dashboard</a><br>
+                        2. Selecionar seu site<br>
+                        3. Ir para <strong>Deploys</strong><br>
+                        4. Clicar <strong>"Trigger deploy"</strong> → <strong>"Deploy site"</strong>
+                    </div>
+                </div>
+
+                <!-- PASSO 4: Aguardar -->
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h2>Aguardar Build (5-10 minutos)</h2>
+
+                    <div class="instructions">
+                        <strong>⚙️ O que fazer:</strong><br><br>
+                        • GitHub Actions irá rodar os testes<br>
+                        • Netlify irá fazer npm run build<br>
+                        • Você pode acompanhar em tempo real<br>
+                        • Quando terminar, verá ✅ (sucesso) ou ❌ (erro)
+                    </div>
+                </div>
+
+                <!-- PASSO 5: Testar -->
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h2>Testar Login em Produção</h2>
+
+                    <div class="instructions">
+                        <strong>⚙️ O que fazer:</strong><br><br>
+                        1. Abrir sua URL Netlify (ex: https://seu-site.netlify.app)<br>
+                        2. Clicar em <strong>"Entrar no Google"</strong><br>
+                        3. Fazer login com sua conta Google<br>
+                        4. Se funcionar → ✅ <strong>Parabéns!</strong> Firebase está working
+                    </div>
+
+                    <div class="success">
+                        ✅ Se o login funcionar, significa que Firebase está corretamente configurado em produção!
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Timeline -->
+            <div class="step" style="margin-top: 40px; border-left-color: #28a745;">
+                <h2 style="color: #28a745;">📊 Timeline</h2>
+                <div class="instructions">
+                    <strong>Agora:</strong> Adicionar secrets (5 min)<br>
+                    <strong>+3 min:</strong> GitHub Actions rodando testes<br>
+                    <strong>+8 min:</strong> Netlify fazendo deploy<br>
+                    <strong>+10 min:</strong> ✅ Frontend em produção com Firebase funcionando
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>💡 Dica: Você pode deixar este guia aberto em uma aba enquanto faz o setup em outra</p>
+            <p style="margin-top: 10px; font-size: 12px;">Desenvolvido para Espeto MVP</p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(btn) {
+            // Pegar o texto do irmão anterior (o valor)
+            const value = btn.previousElementSibling.textContent.trim();
+
+            // Copiar para clipboard
+            navigator.clipboard.writeText(value).then(() => {
+                // Mudar o texto do botão
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copiado!';
+
+                // Voltar após 2 segundos
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+name: 🚀 Deploy to Netlify + Production
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # ============================================================================
+  # TESTE & BUILD
+  # ============================================================================
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: 🔍 Install dependencies
+        run: npm ci
+
+      - name: 🧹 Lint code
+        run: npm run lint
+        continue-on-error: true
+
+      - name: 🧪 Run tests
+        run: npm run test:cash
+        env:
+          NODE_ENV: test
+
+      - name: 🧪 Security tests
+        run: npm run test:security
+        continue-on-error: true
+
+      - name: 🏗️ Build project
+        run: npm run build
+        env:
+          NODE_ENV: production
+          REACT_APP_API_URL: ${{ secrets.NETLIFY_API_URL || 'https://espeto-api.netlify.app' }}
+
+      - name: 📊 Show build size
+        run: du -sh dist/
+
+  # ============================================================================
+  # DEPLOY FRONTEND (NETLIFY)
+  # ============================================================================
+  deploy-frontend:
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: 🔍 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build frontend
+        run: npm run build
+        env:
+          NODE_ENV: production
+          REACT_APP_API_URL: ${{ secrets.API_URL }}
+
+      - name: 🌐 Deploy to Netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: ✅ Deployment success notification
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Frontend deployed to Netlify!\n🌐 https://espeto-pdv.netlify.app'
+            })
+
+  # ============================================================================
+  # DEPLOY BACKEND (VIA COOLIFY WEBHOOK)
+  # ============================================================================
+  deploy-backend:
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐳 Build Docker image
+        run: |
+          docker build -t espeto:${{ github.sha }} \
+            --build-arg NODE_ENV=production \
+            .
+
+      - name: 🔐 Push to Docker Hub
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker tag espeto:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/espeto:latest
+          docker tag espeto:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/espeto:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/espeto:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/espeto:${{ github.sha }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 🚀 Trigger Coolify deployment
+        run: |
+          curl -X POST ${{ secrets.COOLIFY_WEBHOOK_URL }} \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "service": "espeto-backend",
+              "version": "${{ github.sha }}",
+              "environment": "production"
+            }'
+
+  # ============================================================================
+  # NOTIFICAÇÃO FINAL
+  # ============================================================================
+  notify-slack:
+    needs: [deploy-frontend, deploy-backend]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: 📢 Notify Slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          payload: |
+            {
+              "text": "Espeto Deploy Status",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Espeto PDV Deploy*\n${{ job.status == 'success' && '✅ Success!' || '❌ Failed' }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n${{ github.ref }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n${{ github.sha }}"
+                    }
+                  ]
+                }
+              ]
+            }

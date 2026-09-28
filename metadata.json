@@ -1,0 +1,6 @@
+{
+  "name": "Sistema PDV & Gestão Comercial",
+  "description": "Plataforma empresarial multi-tenant, multiunidade, transacional com PostgreSQL e inteligência artificial para bares, restaurantes, espetarias e tabacarias.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

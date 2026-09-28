@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema PDV & Gestão Comercial</title>
+    <meta name="description" content="Plataforma empresarial multi-tenant, multiunidade, transacional com PostgreSQL e inteligência artificial para bares, restaurantes, espetarias e tabacarias." />
+    <meta property="og:title" content="Sistema PDV & Gestão Comercial" />
+    <meta property="og:description" content="Plataforma empresarial multi-tenant, multiunidade, transacional com PostgreSQL e inteligência artificial para bares, restaurantes, espetarias e tabacarias." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function() {
+        try {
+          var originalFetch = typeof window !== 'undefined' && window.fetch ? window.fetch.bind(window) : undefined;
+          var currentFetch = originalFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return currentFetch || originalFetch;
+            },
+            set: function(val) {
+              currentFetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          // ignore if already configurable or locked
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
